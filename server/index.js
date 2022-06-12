@@ -58,6 +58,12 @@ export async function createServer(
 
   app.use(cookieParser(Shopify.Context.API_SECRET_KEY));
 
+   // Expose mongodb on req
+   app.use((req, res, next) => {
+    req.db = mongodb.db(MONGODB_DB);
+    next();
+  });
+
   applyAuthMiddleware(app);
 
   app.post("/webhooks", async (req, res) => {
