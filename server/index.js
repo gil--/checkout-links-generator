@@ -3,6 +3,7 @@ import { resolve } from "path";
 import express from "express";
 import cookieParser from "cookie-parser";
 import { Shopify, ApiVersion } from "@shopify/shopify-api";
+import { MongoClient } from "mongodb";
 import "dotenv/config";
 
 import applyAuthMiddleware from "./middleware/auth.js";
@@ -13,6 +14,16 @@ const TOP_LEVEL_OAUTH_COOKIE = "shopify_top_level_oauth";
 
 const PORT = parseInt(process.env.PORT || "8081", 10);
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
+const { MONGODB_DB, MONGODB_URI } = process.env;
+
+// Connect to Mongodb and set to common connection variable for pooling
+const mongodb = await MongoClient.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(async (connection) => {
+  console.log(`Successfully connected to ${MONGODB_DB}`);
+  return connection;
+});
 
 Shopify.Context.initialize({
   API_KEY: process.env.SHOPIFY_API_KEY,
