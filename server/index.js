@@ -12,9 +12,9 @@ import verifyRequest from "./middleware/verify-request.js";
 const USE_ONLINE_TOKENS = true;
 const TOP_LEVEL_OAUTH_COOKIE = "shopify_top_level_oauth";
 
+const { MONGODB_DB, MONGODB_URI } = process.env;
 const PORT = parseInt(process.env.PORT || "8081", 10);
 const isTest = process.env.NODE_ENV === "test" || !!process.env.VITE_TEST_BUILD;
-const { MONGODB_DB, MONGODB_URI } = process.env;
 
 // Connect to Mongodb and set to common connection variable for pooling
 const mongodb = await MongoClient.connect(MONGODB_URI, {
